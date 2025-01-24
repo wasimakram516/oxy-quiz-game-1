@@ -14,11 +14,12 @@ function QuizScreen() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [correctAnswerShown, setCorrectAnswerShown] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [madeToLeaderboard, setMadeToLeaderboard] = useState(false);
   const [playerName] = useState(localStorage.getItem("userName"));
-  const [soundPlaying, setSoundPlaying] = useState(false); // Prevent moving ahead while sound is playing
-
+  const [soundPlaying, setSoundPlaying] = useState(false);
+  
   const handleRestartClick = () => {
     // Navigate to the /name route
     navigate("/name");
@@ -30,35 +31,44 @@ function QuizScreen() {
 
     const isCorrect = index === questions[currentQuestion].answer;
     const audio = new Audio(isCorrect ? successSound : wrongSound);
-    setSoundPlaying(true); // Lock the state until sound finishes
+    setSoundPlaying(true);
     setSelectedAnswer(index);
+
+    // Show the correct answer
+    if (!isCorrect) {
+      setCorrectAnswerShown(true);
+    }
 
     // Play sound and move to the next question when it ends
     audio.onended = () => {
-      setSoundPlaying(false); // Unlock state after sound finishes
+      setSoundPlaying(false);
 
       if (isCorrect) {
         setScore((prev) => prev + 1);
       }
 
-      if (currentQuestion + 1 < questions.length) {
+      setTimeout(() => {
         setSelectedAnswer(null);
-        setCurrentQuestion((prev) => prev + 1);
-      } else {
-        setQuizCompleted(true);
+        setCorrectAnswerShown(false);
 
-        // Check if user made it to the leaderboard
-        if (score + 1 === questions.length) {
-          const celebrateAudio = new Audio(celebrateSound);
-          celebrateAudio.play();
+        if (currentQuestion + 1 < questions.length) {
+          setCurrentQuestion((prev) => prev + 1);
+        } else {
+          setQuizCompleted(true);
 
-          const winners = JSON.parse(localStorage.getItem("winners")) || [];
-          winners.push(playerName);
-          localStorage.setItem("winners", JSON.stringify(winners));
+          // Check if user made it to the leaderboard
+          if (score + 1 === questions.length) {
+            const celebrateAudio = new Audio(celebrateSound);
+            celebrateAudio.play();
 
-          setMadeToLeaderboard(true);
+            const winners = JSON.parse(localStorage.getItem("winners")) || [];
+            winners.push(playerName);
+            localStorage.setItem("winners", JSON.stringify(winners));
+
+            setMadeToLeaderboard(true);
+          }
         }
-      }
+      }, 2000);
     };
 
     audio.play();
@@ -90,7 +100,7 @@ function QuizScreen() {
           top: "20px",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "250px",
+          width: "150px",
           height: "auto",
         }}
       />
@@ -107,7 +117,7 @@ function QuizScreen() {
           borderRadius: "25px",
           padding: "10px 20px",
           fontWeight: "bold",
-          zIndex: 1000,
+          zIndex: 10,
         }}
       >
         Restart
@@ -129,11 +139,11 @@ function QuizScreen() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            zIndex: 10,
+            zIndex: 1000,
             padding: "20px",
           }}
         >
-          <Typography variant="h2" color="white" fontWeight="bold" mb={2}>
+          <Typography variant="h2" color="white" textAlign="center" fontWeight="bold" mb={2}>
             🎉 Congratulations, {playerName}! 🎉
           </Typography>
           <Typography
@@ -173,7 +183,7 @@ function QuizScreen() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            zIndex: 10,
+            zIndex: 1000,
             padding: "20px",
           }}
         >
@@ -234,12 +244,16 @@ function QuizScreen() {
                       ? index === questions[currentQuestion].answer
                         ? "success.main"
                         : "error.main"
+                      : correctAnswerShown && index === questions[currentQuestion].answer
+                      ? "success.main"
                       : "secondary.main",
                   backgroundColor:
                     selectedAnswer === index
                       ? index === questions[currentQuestion].answer
                         ? "success.light"
                         : "error.light"
+                      : correctAnswerShown && index === questions[currentQuestion].answer
+                      ? "success.light"
                       : "white",
                   borderRadius: "10px",
                   width: "250px",
@@ -257,24 +271,26 @@ function QuizScreen() {
                 <Typography
                   sx={{
                     position: "absolute",
-                    top: "-15px",
+                    top: "-25px",
                     left: "50%",
                     transform: "translateX(-50%)",
                     backgroundColor: "secondary.main",
                     color: "white",
                     borderRadius: "50%",
-                    width: "30px",
-                    height: "30px",
+                    width: "50px",
+                    height: "50px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "bold",
+                    fontSize:"2rem"
                   }}
                 >
                   {index + 1}
                 </Typography>
-                <Typography variant="h6" sx={{
-                    textAlign:"center"}}>{option}</Typography>
+                <Typography variant="h6" sx={{ textAlign: "center" }}>
+                  {option}
+                </Typography>
               </Box>
             ))}
           </Box>
