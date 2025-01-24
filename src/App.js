@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import AppRoutes from "./routes";
 import theme from "./styles/theme"; // Import the custom theme
