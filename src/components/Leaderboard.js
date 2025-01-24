@@ -8,15 +8,15 @@ function Leaderboard() {
     <Box
       sx={{
         position: "fixed",
-        top: 16,
-        right: 16,
+        top: { xs: 8, sm: 16 },
+        right: { xs: 8, sm: 16 },
         backgroundColor: "white",
-        padding: 2,
+        padding: { xs: "10px", sm: "20px" },
         borderRadius: 2,
         boxShadow: 3,
-        width: "200px",
-        border: "1px solid #e1705d", 
-        zIndex: 10, 
+        width: { xs: "150px", sm: "200px" },
+        border: "1px solid #e1705d",
+        zIndex: 10,
       }}
     >
       <Typography
@@ -26,6 +26,7 @@ function Leaderboard() {
           fontWeight: "bold",
           color: "secondary.main",
           mb: 2,
+          fontSize: { xs: "1rem", sm: "1.5rem" },
         }}
       >
         Leaderboard
@@ -41,12 +42,12 @@ function Leaderboard() {
           <Box
             key={index}
             sx={{
-              padding: "8px 12px",
+              padding: { xs: "6px 8px", sm: "8px 12px" },
               backgroundColor: "#f9f9f9",
               border: "1px solid #ddd",
               borderRadius: "5px",
               textAlign: "center",
-              fontSize: "0.9rem",
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
               fontWeight: "500",
               color: "#333",
             }}

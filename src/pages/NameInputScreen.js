@@ -39,8 +39,8 @@ function NameInputScreen() {
       <Box
         sx={{
           position: "absolute",
-          top: "5%",
-          left: "5%",
+          top: { xs: "2%", sm: "5%" },
+          left: { xs: "2%", sm: "5%" },
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
@@ -51,7 +51,7 @@ function NameInputScreen() {
           src={oxyLogo}
           alt="OXY Logo"
           sx={{
-            maxWidth: "300px",
+            maxWidth: { xs: "200px", sm: "300px" },
             height: "auto",
           }}
         />
@@ -60,10 +60,11 @@ function NameInputScreen() {
           sx={{
             marginTop: "20px",
             marginLeft: "30px",
+            fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
             fontWeight: "bold",
             color: "black",
             textAlign: "left",
-            lineHeight: "1.5",
+            lineHeight: "1.2",
             textShadow: "2px 2px 4px rgba(255, 255, 255, 0.8)",
           }}
         >
@@ -81,7 +82,7 @@ function NameInputScreen() {
           </Box>
         </Typography>
       </Box>
-
+      
       {/* Leaderboard Component */}
       <Leaderboard />
 
@@ -109,6 +110,7 @@ function NameInputScreen() {
             fontWeight: "bold",
             color: "text.primary",
             marginBottom: "10px",
+            fontSize: { xs: "1.2rem", sm: "1.5rem" },
           }}
         >
           Name
@@ -142,10 +144,10 @@ function NameInputScreen() {
           fullWidth
           sx={{
             marginTop: "20px",
-            fontSize: "2rem",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
             fontWeight: "bold",
             borderRadius: "25px",
-            padding: "10px 20px",
+            padding: { xs: "8px 16px", sm: "10px 20px" },
           }}
         >
           START

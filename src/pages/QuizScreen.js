@@ -21,12 +21,11 @@ function QuizScreen() {
   const [soundPlaying, setSoundPlaying] = useState(false);
 
   const handleRestartClick = () => {
-    // Navigate to the /name route
     navigate("/name");
   };
 
   const handleAnswer = (index) => {
-    if (soundPlaying) return; // Prevent additional clicks while the sound is playing
+    if (soundPlaying) return;
 
     const isCorrect = index === questions[currentQuestion].answer;
     const audio = new Audio(isCorrect ? successSound : wrongSound);
@@ -35,25 +34,21 @@ function QuizScreen() {
 
     if (!isCorrect) setCorrectAnswerShown(true);
 
-    // Play sound and handle logic after sound ends
     audio.onended = () => {
       setSoundPlaying(false);
 
       if (isCorrect) setScore((prev) => prev + 1);
 
       if (currentQuestion + 1 < questions.length) {
-        // Move to the next question if available
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
         setCurrentQuestion((prev) => prev + 1);
       } else {
-        // Quiz is completed
         setQuizCompleted(true);
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
 
         if (score + 1 === questions.length) {
-          // All answers correct, play celebration and add to leaderboard
           const celebrateAudio = new Audio(celebrateSound);
           celebrateAudio.play();
 
@@ -63,7 +58,6 @@ function QuizScreen() {
 
           setMadeToLeaderboard(true);
         } else {
-          // Not all answers correct, no leaderboard
           setMadeToLeaderboard(false);
         }
       }
@@ -84,7 +78,7 @@ function QuizScreen() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding: "20px",
+        padding: { xs: "10px", sm: "20px" },
         overflow: "hidden",
       }}
     >
@@ -95,36 +89,38 @@ function QuizScreen() {
         alt="OXY Logo"
         sx={{
           position: "absolute",
-          top: "20px",
+          top: { xs: "10px", sm: "20px" },
           left: "50%",
           transform: "translateX(-50%)",
-          width: "150px",
+          width: { xs: "100px", sm: "150px" },
           height: "auto",
         }}
       />
-      {/* Restart Button - Fixed to the top-left corner */}
+
+      {/* Restart Button */}
       <Button
         variant="contained"
         color="secondary"
         onClick={handleRestartClick}
         sx={{
           position: "fixed",
-          top: "30px",
-          left: "30px",
-          fontSize: "2rem",
+          top: { xs: "10px", sm: "30px" },
+          left: { xs: "10px", sm: "30px" },
+          fontSize: { xs: "1.2rem", sm: "2rem" },
           borderRadius: "25px",
-          padding: "10px 20px",
+          padding: { xs: "8px 12px", sm: "10px 20px" },
           fontWeight: "bold",
           zIndex: 10,
         }}
       >
         Restart
       </Button>
+
       {/* Leaderboard */}
       <Leaderboard />
 
-      {/* Quiz Completed Screen */}
-      {quizCompleted && madeToLeaderboard && (
+      {/* Quiz Completion */}
+      {quizCompleted ? (
         <Box
           sx={{
             position: "absolute",
@@ -137,84 +133,62 @@ function QuizScreen() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            padding: { xs: "10px", sm: "20px" },
             zIndex: 1000,
-            padding: "20px",
           }}
         >
           <Typography
-            variant="h2"
+            variant="h3"
+            color="white"
+            fontWeight="bold"
+            textAlign="center"
+            mb={2}
+            sx={{ fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
+          >
+            {madeToLeaderboard
+              ? `🎉 Congratulations, ${playerName}! 🎉`
+              : "Quiz Completed!"}
+          </Typography>
+          <Typography
+            variant="h5"
             color="white"
             textAlign="center"
-            fontWeight="bold"
-            mb={2}
+            mb={3}
+            sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
           >
-            🎉 Congratulations, {playerName}! 🎉
-          </Typography>
-          <Typography variant="h5" color="white" textAlign="center" mb={3}>
-            You made it to the leaderboard by answering all questions correctly!
+            {madeToLeaderboard
+              ? "You made it to the leaderboard!"
+              : `You scored ${score} out of ${questions.length}. Better luck next time!`}
           </Typography>
           <Button
             variant="contained"
             color="primary"
             onClick={() => navigate("/name")}
             sx={{
-              padding: "10px 20px",
-              fontSize: "16px",
+              padding: { xs: "8px 16px", sm: "10px 20px" },
+              fontSize: { xs: "1rem", sm: "1.2rem" },
               fontWeight: "bold",
             }}
           >
-            Play Again
+            {madeToLeaderboard ? "Play Again" : "Try Again"}
           </Button>
         </Box>
-      )}
-
-      {/* Quiz Completed but Not All Answers Correct */}
-      {quizCompleted && !madeToLeaderboard && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-            padding: "20px",
-          }}
-        >
-          <Typography variant="h2" color="white" fontWeight="bold" mb={2}>
-            Quiz Completed!
-          </Typography>
-          <Typography variant="h5" color="white" textAlign="center" mb={3}>
-            You scored {score} out of {questions.length}. Better luck next time!
-          </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate("/name")}
-            sx={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Try Again
-          </Button>
-        </Box>
-      )}
-
-      {/* Question Section */}
-      {!quizCompleted && (
+      ) : (
         <>
+          {/* Question Section */}
           <Box sx={{ width: "100%", textAlign: "center", mb: 4 }}>
-            <Typography variant="h3" fontWeight="bold" mb={2}>
+            <Typography
+              variant="h3"
+              fontWeight="bold"
+              mb={2}
+              sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }}
+            >
               Question {currentQuestion + 1} / {questions.length}
             </Typography>
-            <Typography variant="h4">
+            <Typography
+              variant="h5"
+              sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }}
+            >
               {questions[currentQuestion].question}
             </Typography>
           </Box>
@@ -223,7 +197,7 @@ function QuizScreen() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
               gap: 4,
               width: "100%",
               maxWidth: "600px",
@@ -254,14 +228,14 @@ function QuizScreen() {
                       ? "success.light"
                       : "white",
                   borderRadius: "10px",
-                  width: "250px",
-                  height: "250px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: soundPlaying ? "not-allowed" : "pointer",
                   p: 2,
+                  width: "100%",
+                  height: { xs: "150px", sm: "200px" },
                 }}
                 onClick={() => handleAnswer(index)}
                 disabled={soundPlaying || selectedAnswer !== null}
@@ -269,24 +243,30 @@ function QuizScreen() {
                 <Typography
                   sx={{
                     position: "absolute",
-                    top: "-25px",
+                    top: "-20px",
                     left: "50%",
                     transform: "translateX(-50%)",
                     backgroundColor: "secondary.main",
                     color: "white",
                     borderRadius: "50%",
-                    width: "50px",
-                    height: "50px",
+                    width: { xs: "40px", sm: "50px" },
+                    height: { xs: "40px", sm: "50px" },
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "bold",
-                    fontSize: "2rem",
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
                   }}
                 >
                   {index + 1}
                 </Typography>
-                <Typography variant="h6" sx={{ textAlign: "center" }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    textAlign: "center",
+                    fontSize: { xs: "1rem", sm: "1.2rem" },
+                  }}
+                >
                   {option}
                 </Typography>
               </Box>
