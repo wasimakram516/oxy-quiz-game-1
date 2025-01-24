@@ -19,12 +19,11 @@ function QuizScreen() {
   const [madeToLeaderboard, setMadeToLeaderboard] = useState(false);
   const [playerName] = useState(localStorage.getItem("userName"));
   const [soundPlaying, setSoundPlaying] = useState(false);
-  
+
   const handleRestartClick = () => {
     // Navigate to the /name route
     navigate("/name");
   };
-  
 
   const handleAnswer = (index) => {
     if (soundPlaying) return; // Prevent additional clicks while the sound is playing
@@ -34,41 +33,40 @@ function QuizScreen() {
     setSoundPlaying(true);
     setSelectedAnswer(index);
 
-    // Show the correct answer
-    if (!isCorrect) {
-      setCorrectAnswerShown(true);
-    }
+    if (!isCorrect) setCorrectAnswerShown(true);
 
-    // Play sound and move to the next question when it ends
+    // Play sound and handle logic after sound ends
     audio.onended = () => {
       setSoundPlaying(false);
 
-      if (isCorrect) {
-        setScore((prev) => prev + 1);
-      }
+      if (isCorrect) setScore((prev) => prev + 1);
 
-      setTimeout(() => {
+      if (currentQuestion + 1 < questions.length) {
+        // Move to the next question if available
+        setSelectedAnswer(null);
+        setCorrectAnswerShown(false);
+        setCurrentQuestion((prev) => prev + 1);
+      } else {
+        // Quiz is completed
+        setQuizCompleted(true);
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
 
-        if (currentQuestion + 1 < questions.length) {
-          setCurrentQuestion((prev) => prev + 1);
+        if (score + 1 === questions.length) {
+          // All answers correct, play celebration and add to leaderboard
+          const celebrateAudio = new Audio(celebrateSound);
+          celebrateAudio.play();
+
+          const winners = JSON.parse(localStorage.getItem("winners")) || [];
+          winners.push(playerName);
+          localStorage.setItem("winners", JSON.stringify(winners));
+
+          setMadeToLeaderboard(true);
         } else {
-          setQuizCompleted(true);
-
-          // Check if user made it to the leaderboard
-          if (score + 1 === questions.length) {
-            const celebrateAudio = new Audio(celebrateSound);
-            celebrateAudio.play();
-
-            const winners = JSON.parse(localStorage.getItem("winners")) || [];
-            winners.push(playerName);
-            localStorage.setItem("winners", JSON.stringify(winners));
-
-            setMadeToLeaderboard(true);
-          }
+          // Not all answers correct, no leaderboard
+          setMadeToLeaderboard(false);
         }
-      }, 2000);
+      }
     };
 
     audio.play();
@@ -108,7 +106,7 @@ function QuizScreen() {
       <Button
         variant="contained"
         color="secondary"
-        onClick={handleRestartClick} 
+        onClick={handleRestartClick}
         sx={{
           position: "fixed",
           top: "30px",
@@ -125,7 +123,7 @@ function QuizScreen() {
       {/* Leaderboard */}
       <Leaderboard />
 
-      {/* Celebration Screen */}
+      {/* Quiz Completed Screen */}
       {quizCompleted && madeToLeaderboard && (
         <Box
           sx={{
@@ -143,15 +141,16 @@ function QuizScreen() {
             padding: "20px",
           }}
         >
-          <Typography variant="h2" color="white" textAlign="center" fontWeight="bold" mb={2}>
-            🎉 Congratulations, {playerName}! 🎉
-          </Typography>
           <Typography
-            variant="h5"
+            variant="h2"
             color="white"
             textAlign="center"
-            mb={3}
+            fontWeight="bold"
+            mb={2}
           >
+            🎉 Congratulations, {playerName}! 🎉
+          </Typography>
+          <Typography variant="h5" color="white" textAlign="center" mb={3}>
             You made it to the leaderboard by answering all questions correctly!
           </Typography>
           <Button
@@ -169,7 +168,7 @@ function QuizScreen() {
         </Box>
       )}
 
-      {/* Quiz Completed Screen */}
+      {/* Quiz Completed but Not All Answers Correct */}
       {quizCompleted && !madeToLeaderboard && (
         <Box
           sx={{
@@ -190,12 +189,7 @@ function QuizScreen() {
           <Typography variant="h2" color="white" fontWeight="bold" mb={2}>
             Quiz Completed!
           </Typography>
-          <Typography
-            variant="h5"
-            color="white"
-            textAlign="center"
-            mb={3}
-          >
+          <Typography variant="h5" color="white" textAlign="center" mb={3}>
             You scored {score} out of {questions.length}. Better luck next time!
           </Typography>
           <Button
@@ -220,7 +214,9 @@ function QuizScreen() {
             <Typography variant="h3" fontWeight="bold" mb={2}>
               Question {currentQuestion + 1} / {questions.length}
             </Typography>
-            <Typography variant="h4">{questions[currentQuestion].question}</Typography>
+            <Typography variant="h4">
+              {questions[currentQuestion].question}
+            </Typography>
           </Box>
 
           {/* Options */}
@@ -244,7 +240,8 @@ function QuizScreen() {
                       ? index === questions[currentQuestion].answer
                         ? "success.main"
                         : "error.main"
-                      : correctAnswerShown && index === questions[currentQuestion].answer
+                      : correctAnswerShown &&
+                        index === questions[currentQuestion].answer
                       ? "success.main"
                       : "secondary.main",
                   backgroundColor:
@@ -252,7 +249,8 @@ function QuizScreen() {
                       ? index === questions[currentQuestion].answer
                         ? "success.light"
                         : "error.light"
-                      : correctAnswerShown && index === questions[currentQuestion].answer
+                      : correctAnswerShown &&
+                        index === questions[currentQuestion].answer
                       ? "success.light"
                       : "white",
                   borderRadius: "10px",
@@ -283,7 +281,7 @@ function QuizScreen() {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "bold",
-                    fontSize:"2rem"
+                    fontSize: "2rem",
                   }}
                 >
                   {index + 1}
