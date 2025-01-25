@@ -41,19 +41,42 @@ function QuizScreen() {
 
   const handleAnswer = (index) => {
     if (soundPlaying) return;
-
+  
     const isCorrect = index === questions[currentQuestion].answer;
     const audio = new Audio(isCorrect ? successSound : wrongSound);
     setSoundPlaying(true);
     setSelectedAnswer(index);
-
-    if (!isCorrect) setCorrectAnswerShown(true);
-
+  
+    if (!isCorrect) {
+      setCorrectAnswerShown(true);
+    }
+  
     audio.onended = () => {
       setSoundPlaying(false);
-
-      if (isCorrect) setScore((prev) => prev + 1);
-
+  
+      if (isCorrect) {
+        const newScore = score + 1;
+        setScore(newScore);
+  
+        // Check if it’s the last question and all mountains are revealed
+        const isLastQuestion = currentQuestion + 1 === questions.length;
+        if (isLastQuestion && newScore === mountains.length) {
+          // Reveal the last mountain and then handle end-screen logic
+          setTimeout(() => {
+            const celebrateAudio = new Audio(celebrateSound);
+            celebrateAudio.play();
+  
+            const winners = JSON.parse(localStorage.getItem("winners")) || [];
+            winners.push(playerName);
+            localStorage.setItem("winners", JSON.stringify(winners));
+  
+            setMadeToLeaderboard(true);
+            setQuizCompleted(true);
+          }, 2000); // Delay to ensure mountain reveal animation completes
+          return;
+        }
+      }
+  
       if (currentQuestion + 1 < questions.length) {
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
@@ -62,24 +85,25 @@ function QuizScreen() {
         setQuizCompleted(true);
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
-
+  
         if (score + 1 === questions.length) {
           const celebrateAudio = new Audio(celebrateSound);
           celebrateAudio.play();
-
+  
           const winners = JSON.parse(localStorage.getItem("winners")) || [];
           winners.push(playerName);
           localStorage.setItem("winners", JSON.stringify(winners));
-
+  
           setMadeToLeaderboard(true);
         } else {
           setMadeToLeaderboard(false);
         }
       }
     };
-
+  
     audio.play();
   };
+  
 
   return (
     <Box
@@ -191,7 +215,14 @@ function QuizScreen() {
       ) : (
         <>
           {/* Question Section */}
-          <Box sx={{ width: "100%", textAlign: "center", mb: {xs:"50px",sm:"100px"}, mt: "150px" }}>
+          <Box
+            sx={{
+              width: "100%",
+              textAlign: "center",
+              mb: { xs: "50px", sm: "100px" },
+              mt: "150px",
+            }}
+          >
             <Typography
               variant="h3"
               fontWeight="bold"
@@ -307,7 +338,7 @@ function QuizScreen() {
                   width: "100 %",
                   height: "500px",
                   overflow: "hidden",
-                  mt:{xs:"20px",sm:"100px"}
+                  mt: { xs: "20px", sm: "100px" },
                 }}
               >
                 {/* Mountain Image */}
@@ -319,19 +350,8 @@ function QuizScreen() {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                  }}
-                />
-
-                {/* Color Overlay */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: index < score ? mountain.overlay : "transparent",
-                    transition: "background-color 0.3s ease",
+                    opacity: index < score ? 1 : 0, // Show fully visible for revealed mountains
+                    transition: "opacity 1s ease-in-out", // Smooth fade-in animation
                   }}
                 />
               </Box>
