@@ -1,22 +1,27 @@
 {
   "files": {
-    "main.css": "/oxy-quiz-1/static/css/main.e6c13ad2.css",
-    "main.js": "/oxy-quiz-1/static/js/main.8a7cb690.js",
-    "static/js/453.e63cc56e.chunk.js": "/oxy-quiz-1/static/js/453.e63cc56e.chunk.js",
-    "static/media/correct.wav": "/oxy-quiz-1/static/media/correct.d1089aa121189c44de7e.wav",
-    "static/media/wrong.wav": "/oxy-quiz-1/static/media/wrong.61d8264cf7e7047cf510.wav",
-    "static/media/celebrateLeaderboard.mp3": "/oxy-quiz-1/static/media/celebrateLeaderboard.0b4f36269ee8a90d50d9.mp3",
-    "static/media/Oxy-bg-start1.webp": "/oxy-quiz-1/static/media/Oxy-bg-start1.9b65e6663e96f7a9322d.webp",
-    "static/media/bgName.webp": "/oxy-quiz-1/static/media/bgName.f9ce688ee29822fd0fa7.webp",
-    "static/media/Background.webp": "/oxy-quiz-1/static/media/Background.1b87ccf58f1669281ba9.webp",
-    "static/media/oxy-logo-color.webp": "/oxy-quiz-1/static/media/oxy-logo-color.1ed7e3489a6680d24372.webp",
-    "index.html": "/oxy-quiz-1/index.html",
-    "main.e6c13ad2.css.map": "/oxy-quiz-1/static/css/main.e6c13ad2.css.map",
-    "main.8a7cb690.js.map": "/oxy-quiz-1/static/js/main.8a7cb690.js.map",
-    "453.e63cc56e.chunk.js.map": "/oxy-quiz-1/static/js/453.e63cc56e.chunk.js.map"
+    "main.css": "/oxy-quiz-game-1/static/css/main.e6c13ad2.css",
+    "main.js": "/oxy-quiz-game-1/static/js/main.59a0f4ad.js",
+    "static/js/453.e63cc56e.chunk.js": "/oxy-quiz-game-1/static/js/453.e63cc56e.chunk.js",
+    "static/media/correct.wav": "/oxy-quiz-game-1/static/media/correct.d1089aa121189c44de7e.wav",
+    "static/media/wrong.wav": "/oxy-quiz-game-1/static/media/wrong.61d8264cf7e7047cf510.wav",
+    "static/media/5.png": "/oxy-quiz-game-1/static/media/5.8a9960d26fb7f37f1178.png",
+    "static/media/celebrateLeaderboard.mp3": "/oxy-quiz-game-1/static/media/celebrateLeaderboard.0b4f36269ee8a90d50d9.mp3",
+    "static/media/Oxy-bg-start1.webp": "/oxy-quiz-game-1/static/media/Oxy-bg-start1.9b65e6663e96f7a9322d.webp",
+    "static/media/4.png": "/oxy-quiz-game-1/static/media/4.a3c0a33a00a79b1ecfd7.png",
+    "static/media/3.png": "/oxy-quiz-game-1/static/media/3.3bbf5adf847f0da1324f.png",
+    "static/media/2.png": "/oxy-quiz-game-1/static/media/2.e2d6db9149a5f2c930d8.png",
+    "static/media/bgName.webp": "/oxy-quiz-game-1/static/media/bgName.f9ce688ee29822fd0fa7.webp",
+    "static/media/Background.webp": "/oxy-quiz-game-1/static/media/Background.1b87ccf58f1669281ba9.webp",
+    "static/media/1.png": "/oxy-quiz-game-1/static/media/1.65019b01819e9f931ac1.png",
+    "static/media/oxy-logo-color.webp": "/oxy-quiz-game-1/static/media/oxy-logo-color.1ed7e3489a6680d24372.webp",
+    "index.html": "/oxy-quiz-game-1/index.html",
+    "main.e6c13ad2.css.map": "/oxy-quiz-game-1/static/css/main.e6c13ad2.css.map",
+    "main.59a0f4ad.js.map": "/oxy-quiz-game-1/static/js/main.59a0f4ad.js.map",
+    "453.e63cc56e.chunk.js.map": "/oxy-quiz-game-1/static/js/453.e63cc56e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.8a7cb690.js"
+    "static/js/main.59a0f4ad.js"
   ]
 }
