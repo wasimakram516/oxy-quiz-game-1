@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, LinearProgress, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
 import oxyLogo from "../assets/oxy-logo-color.webp";
@@ -8,6 +8,21 @@ import wrongSound from "../assets/wrong.wav";
 import celebrateSound from "../assets/celebrateLeaderboard.mp3";
 import Background from "../assets/Background.webp";
 import Leaderboard from "../components/Leaderboard";
+
+// Import mountain images
+import mountain1 from "../assets/mountains/1.png";
+import mountain2 from "../assets/mountains/2.png";
+import mountain3 from "../assets/mountains/3.png";
+import mountain4 from "../assets/mountains/4.png";
+import mountain5 from "../assets/mountains/5.png";
+
+const mountains = [
+  { image: mountain1, overlay: "rgba(107, 107, 107, 0.6)" },
+  { image: mountain2, overlay: "rgba(255, 187, 188, 0.6)" },
+  { image: mountain3, overlay: "rgba(140, 187, 239, 0.6)" },
+  { image: mountain4, overlay: "rgba(142, 211, 167, 0.6)" },
+  { image: mountain5, overlay: "rgba(211, 199, 141, 0.6)" },
+];
 
 function QuizScreen() {
   const navigate = useNavigate();
@@ -176,7 +191,7 @@ function QuizScreen() {
       ) : (
         <>
           {/* Question Section */}
-          <Box sx={{ width: "100%", textAlign: "center", mb: 4 }}>
+          <Box sx={{ width: "100%", textAlign: "center", mb: {xs:"50px",sm:"100px"}, mt: "150px" }}>
             <Typography
               variant="h3"
               fontWeight="bold"
@@ -273,19 +288,54 @@ function QuizScreen() {
             ))}
           </Box>
 
-          {/* Progress */}
-          <Box sx={{ width: "100%", maxWidth: "600px", mt: 4 }}>
-            <Typography variant="body1" textAlign="center" mb={2}>
-              Correct Answers: {score} / {questions.length}
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={(score / questions.length) * 100}
-              sx={{
-                height: "10px",
-                borderRadius: "5px",
-              }}
-            />
+          {/* Mountains Section */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              mt: 4,
+              overflow: "hidden",
+            }}
+          >
+            {mountains.map((mountain, index) => (
+              <Box
+                key={index}
+                sx={{
+                  position: "relative",
+                  width: "100 %",
+                  height: "500px",
+                  overflow: "hidden",
+                  mt:{xs:"20px",sm:"100px"}
+                }}
+              >
+                {/* Mountain Image */}
+                <Box
+                  component="img"
+                  src={mountain.image}
+                  alt={`Mountain ${index + 1}`}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+
+                {/* Color Overlay */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: index < score ? mountain.overlay : "transparent",
+                    transition: "background-color 0.3s ease",
+                  }}
+                />
+              </Box>
+            ))}
           </Box>
         </>
       )}
