@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Confetti from "react-confetti";
+import { motion } from "framer-motion";
 import questions from "../data/questions";
 import oxyLogo from "../assets/oxy-logo-color.webp";
 import successSound from "../assets/correct.wav";
@@ -9,7 +11,6 @@ import celebrateSound from "../assets/celebrateLeaderboard.mp3";
 import Background from "../assets/Background.webp";
 import Leaderboard from "../components/Leaderboard";
 
-// Import mountain images
 import mountain1 from "../assets/mountains/1.png";
 import mountain2 from "../assets/mountains/2.png";
 import mountain3 from "../assets/mountains/3.png";
@@ -41,42 +42,40 @@ function QuizScreen() {
 
   const handleAnswer = (index) => {
     if (soundPlaying) return;
-  
+
     const isCorrect = index === questions[currentQuestion].answer;
     const audio = new Audio(isCorrect ? successSound : wrongSound);
     setSoundPlaying(true);
     setSelectedAnswer(index);
-  
+
     if (!isCorrect) {
       setCorrectAnswerShown(true);
     }
-  
+
     audio.onended = () => {
       setSoundPlaying(false);
-  
+
       if (isCorrect) {
         const newScore = score + 1;
         setScore(newScore);
-  
-        // Check if it’s the last question and all mountains are revealed
+
         const isLastQuestion = currentQuestion + 1 === questions.length;
         if (isLastQuestion && newScore === mountains.length) {
-          // Reveal the last mountain and then handle end-screen logic
           setTimeout(() => {
             const celebrateAudio = new Audio(celebrateSound);
             celebrateAudio.play();
-  
+
             const winners = JSON.parse(localStorage.getItem("winners")) || [];
             winners.push(playerName);
             localStorage.setItem("winners", JSON.stringify(winners));
-  
+
             setMadeToLeaderboard(true);
             setQuizCompleted(true);
-          }, 2000); // Delay to ensure mountain reveal animation completes
+          }, 2000);
           return;
         }
       }
-  
+
       if (currentQuestion + 1 < questions.length) {
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
@@ -85,25 +84,24 @@ function QuizScreen() {
         setQuizCompleted(true);
         setSelectedAnswer(null);
         setCorrectAnswerShown(false);
-  
+
         if (score + 1 === questions.length) {
           const celebrateAudio = new Audio(celebrateSound);
           celebrateAudio.play();
-  
+
           const winners = JSON.parse(localStorage.getItem("winners")) || [];
           winners.push(playerName);
           localStorage.setItem("winners", JSON.stringify(winners));
-  
+
           setMadeToLeaderboard(true);
         } else {
           setMadeToLeaderboard(false);
         }
       }
     };
-  
+
     audio.play();
   };
-  
 
   return (
     <Box
@@ -158,61 +156,69 @@ function QuizScreen() {
       {/* Leaderboard */}
       <Leaderboard />
 
-      {/* Quiz Completion */}
-      {quizCompleted ? (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: { xs: "10px", sm: "20px" },
-            zIndex: 1000,
-          }}
-        >
-          <Typography
-            variant="h3"
-            color="white"
-            fontWeight="bold"
-            textAlign="center"
-            mb={2}
-            sx={{ fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
-          >
-            {madeToLeaderboard
-              ? `🎉 Congratulations, ${playerName}! 🎉`
-              : "Quiz Completed!"}
-          </Typography>
-          <Typography
-            variant="h5"
-            color="white"
-            textAlign="center"
-            mb={3}
-            sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
-          >
-            {madeToLeaderboard
-              ? "You made it to the leaderboard!"
-              : `You scored ${score} out of ${questions.length}. Better luck next time!`}
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/name")}
-            sx={{
-              padding: { xs: "8px 16px", sm: "10px 20px" },
-              fontSize: { xs: "1rem", sm: "1.2rem" },
-              fontWeight: "bold",
+      {/* End Screen */}
+      {quizCompleted && (
+        <>
+          {madeToLeaderboard && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "20px",
+              zIndex: 1000,
             }}
           >
-            {madeToLeaderboard ? "Play Again" : "Try Again"}
-          </Button>
-        </Box>
-      ) : (
+            <Typography
+              variant="h3"
+              color="white"
+              fontWeight="bold"
+              textAlign="center"
+              mb={2}
+              sx={{ fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
+            >
+              {madeToLeaderboard
+                ? `🎉 Congratulations, ${playerName}! 🎉`
+                : "Quiz Completed!"}
+            </Typography>
+            <Typography
+              variant="h5"
+              color="white"
+              textAlign="center"
+              mb={3}
+              sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
+            >
+              {madeToLeaderboard
+                ? "You made it to the leaderboard!"
+                : `You scored ${score} out of ${questions.length}. Better luck next time!`}
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleRestartClick}
+              sx={{
+                padding: { xs: "8px 16px", sm: "10px 20px" },
+                fontSize: { xs: "1rem", sm: "1.2rem" },
+                fontWeight: "bold",
+              }}
+            >
+              {madeToLeaderboard ? "Play Again" : "Try Again"}
+            </Button>
+          </motion.div>
+        </>
+      )}
+
+      {!quizCompleted && (
         <>
           {/* Question Section */}
           <Box
@@ -286,7 +292,7 @@ function QuizScreen() {
                 onClick={() => handleAnswer(index)}
                 disabled={soundPlaying || selectedAnswer !== null}
               >
-                <Typography
+              <Typography
                   sx={{
                     position: "absolute",
                     top: "-20px",
@@ -318,7 +324,7 @@ function QuizScreen() {
               </Box>
             ))}
           </Box>
-
+          
           {/* Mountains Section */}
           <Box
             sx={{
