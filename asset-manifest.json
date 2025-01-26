@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/oxy-quiz-game-1/static/css/main.e6c13ad2.css",
-    "main.js": "/oxy-quiz-game-1/static/js/main.a8fa85e2.js",
+    "main.js": "/oxy-quiz-game-1/static/js/main.a89f0e7b.js",
     "static/js/453.e63cc56e.chunk.js": "/oxy-quiz-game-1/static/js/453.e63cc56e.chunk.js",
     "static/media/correct.wav": "/oxy-quiz-game-1/static/media/correct.d1089aa121189c44de7e.wav",
     "static/media/wrong.wav": "/oxy-quiz-game-1/static/media/wrong.61d8264cf7e7047cf510.wav",
@@ -17,11 +17,11 @@
     "static/media/oxy-logo-color.webp": "/oxy-quiz-game-1/static/media/oxy-logo-color.1ed7e3489a6680d24372.webp",
     "index.html": "/oxy-quiz-game-1/index.html",
     "main.e6c13ad2.css.map": "/oxy-quiz-game-1/static/css/main.e6c13ad2.css.map",
-    "main.a8fa85e2.js.map": "/oxy-quiz-game-1/static/js/main.a8fa85e2.js.map",
+    "main.a89f0e7b.js.map": "/oxy-quiz-game-1/static/js/main.a89f0e7b.js.map",
     "453.e63cc56e.chunk.js.map": "/oxy-quiz-game-1/static/js/453.e63cc56e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.a8fa85e2.js"
+    "static/js/main.a89f0e7b.js"
   ]
 }
