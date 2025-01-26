@@ -349,7 +349,7 @@ function QuizScreen() {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     opacity: index < score ? 1 : 0, // Show fully visible for revealed mountains
                     transition: "opacity 1s ease-in-out", // Smooth fade-in animation
                   }}
